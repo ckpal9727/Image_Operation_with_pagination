@@ -39,6 +39,7 @@ namespace ImageOperation.Controllers
                     
                 });
 
+            int totalRecords = await query.CountAsync();
             // Apply filtering
             if (!string.IsNullOrEmpty(filterText))
             {
@@ -48,7 +49,7 @@ namespace ImageOperation.Controllers
                     u.City.ToLower().Contains(filterText)||
                     u.State.ToLower().Contains(filterText));
             }
-
+            int totalFilteredRecords = await query.CountAsync();
             // Apply sorting
             query = sortColumn.ToLower() switch
             {
@@ -58,7 +59,9 @@ namespace ImageOperation.Controllers
                 "state" => sortOrder.ToLower() == "desc"
                     ? query.OrderByDescending(u => u.State)
                     : query.OrderBy(u => u.State),
-                _ => query.OrderBy(u => u.City) // Default sorting
+                _ => sortOrder.ToLower() == "desc"
+                    ? query.OrderByDescending(u => u.Name)
+                    : query.OrderBy(u => u.Name) // Default sorting
             };
 
             // Apply pagination
@@ -70,7 +73,13 @@ namespace ImageOperation.Controllers
 
 
             // Return DataTable formatted response
-            return View(new { data = users, total = query.ToList().Count });
+            return Json(new
+            {
+                //draw = HttpContext.Request.Query["draw"], // Required by DataTables for state tracking
+                recordsTotal = totalRecords, // Total records before filtering
+                recordsFiltered = totalFilteredRecords, // Total records after filtering
+                data = users
+            });
         }
         //public async Task<IActionResult> Index(int page = 1, string sortBy = "Name", bool isAsc = true)
         //{

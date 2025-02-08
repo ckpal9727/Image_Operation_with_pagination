@@ -134,3 +134,4 @@ C:\Users\Shivam_Pal\source\repos\ImageOperation\obj\Debug\net8.0\refint\ImageOpe
 C:\Users\Shivam_Pal\source\repos\ImageOperation\obj\Debug\net8.0\ImageOperation.pdb
 C:\Users\Shivam_Pal\source\repos\ImageOperation\obj\Debug\net8.0\ImageOperation.genruntimeconfig.cache
 C:\Users\Shivam_Pal\source\repos\ImageOperation\obj\Debug\net8.0\ref\ImageOperation.dll
+C:\Users\Shivam_Pal\source\repos\ImageOperation\obj\Debug\net8.0\ImageOperation.sourcelink.json

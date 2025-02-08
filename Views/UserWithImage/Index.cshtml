@@ -45,6 +45,7 @@ else
         </tbody>
     </table>
     <div id="noRecordFound" style="display:none; color: red;">No data found</div>
+    <input type="text" id="extra"/>
 }
 @section scripts{
     <script>
@@ -52,54 +53,52 @@ else
             $('.table').DataTable({
                 "processing": true,
                 "serverSide": true,
+                "layout": {
+                    "topStart": 'search',
+                    "topEnd": null
+                },
                 "ajax": {
                     "url": '@Url.Action("GetUsers", "UserWithImage")', // Adjust with your controller name
                     "type": "GET",
                     "data": function (d) {
-                        console.log(d)
-                        // Optionally add any additional parameters here
-                        return d;
+                        // console.log($('#extra').val())
+                        // d.extra_search = $('#extra').val();
+                        return {
+                            filterText: d.search.value,  // Searching input from DataTable
+                            pageNumber: (d.start / d.length) + 1, // Convert start index to page number
+                            pageSize: d.length, // Number of records per page
+                            sortColumn: d.columns[d.order[0].column].data, // Column to sort by
+                            sortOrder: d.order[0].dir // Sorting order (asc/desc)
+                        };
                     }
                 },
                 "columns": [
-                    { "data": "Name" },
-                    { "data": "State" }, // Assuming you want the state name
-                    { "data": "City" } // Assuming you want the city name
-                ]
+                    { "data": "name" },
+                    { "data": "state" },
+                    { "data": "city" }
+                ],
+                "order": [[0, "asc"]] // Default sorting on Name column
             });
-            if ($('#tableBody tr').length === 0) {
-                // If no rows exist, show the "No data found" message
-                $('#noRecordFound').show();
-            } else {
-                // Hide the "No data found" message if there are rows
-                $('#noRecordFound').hide();
-            }
 
-
-            $('.delete-btn').click(function (e) {
+            // Handle delete button click
+            $(document).on('click', '.delete-btn', function () {
                 var record = $(this).data("id");
-                // $.ajax({
-                //     type:"DELETE",
-                //     contentType:"appication/json",
-                //     URL: "/Delete/"+record,
-                //     success:function(){
-                //         console.log("Deleted successfully id " + record);
-                //     }
-                // })
+
                 $.ajax({
                     type: "DELETE",
                     url: "/UserWithImage/Delete/" + record,
                     contentType: "application/json",
-                    success: function (data) {
+                    success: function () {
                         console.log("Deleted successfully id " + record);
                         $('#row-' + record).remove();
                     },
-                    error: function (xhr, status, error) {
-                        alert("Failed to delete employee.");
+                    error: function () {
+                        alert("Failed to delete user.");
                     }
                 });
             });
-        })
+        });
+
     </script>
 }
 
