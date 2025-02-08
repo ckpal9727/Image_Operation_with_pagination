@@ -9,6 +9,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{E1E91551-B1B9-4582-87A6-F885067DB838}|ImageOperation.csproj|c:\\users\\shivam_pal\\source\\repos\\imageoperation\\controllers\\userwithimagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E1E91551-B1B9-4582-87A6-F885067DB838}|ImageOperation.csproj|solutionrelative:controllers\\userwithimagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1E91551-B1B9-4582-87A6-F885067DB838}|ImageOperation.csproj|c:\\users\\shivam_pal\\source\\repos\\imageoperation\\db\\userwithimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1E91551-B1B9-4582-87A6-F885067DB838}|ImageOperation.csproj|solutionrelative:db\\userwithimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,8 +22,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UserWithImage.cs",
+              "DocumentMoniker": "C:\\Users\\Shivam_Pal\\source\\repos\\ImageOperation\\DB\\UserWithImage.cs",
+              "RelativeDocumentMoniker": "DB\\UserWithImage.cs",
+              "ToolTip": "C:\\Users\\Shivam_Pal\\source\\repos\\ImageOperation\\DB\\UserWithImage.cs",
+              "RelativeToolTip": "DB\\UserWithImage.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-08T06:33:22.833Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
@@ -28,7 +45,7 @@
               "RelativeDocumentMoniker": "Controllers\\UserWithImageController.cs",
               "ToolTip": "C:\\Users\\Shivam_Pal\\source\\repos\\ImageOperation\\Controllers\\UserWithImageController.cs",
               "RelativeToolTip": "Controllers\\UserWithImageController.cs",
-              "ViewState": "AgIAADsAAAAAAAAAAAAwwFUAAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAADIAAAAAAAAAAAAwwFAAAAA8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-08T05:25:32.869Z",
               "EditorCaption": ""
@@ -41,7 +58,7 @@
               "RelativeDocumentMoniker": "Views\\UserWithImage\\Index.cshtml",
               "ToolTip": "C:\\Users\\Shivam_Pal\\source\\repos\\ImageOperation\\Views\\UserWithImage\\Index.cshtml",
               "RelativeToolTip": "Views\\UserWithImage\\Index.cshtml",
-              "ViewState": "AgIAACoAAAAAAAAAAAAAAEkAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAFEAAAAAAAAAAADwv3AAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-02-08T05:21:33.115Z",
               "EditorCaption": ""

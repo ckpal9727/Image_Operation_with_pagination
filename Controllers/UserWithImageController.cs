@@ -33,11 +33,14 @@ namespace ImageOperation.Controllers
             var query =_applicationDbContext.Users.Include(x => x.State).Include(x => x.City)
                 .Select(user => new
                 {
+                    Id=user.Id,
                     Name = user.Name,
                     State = user.State.Name,
-                    City = user.City.Name
-                    
-                });
+                    City = user.City.Name,
+                    Image= string.Format("data:image/png;base64, {0}", Convert.ToBase64String(user.Image))
+
+
+        });
 
             int totalRecords = await query.CountAsync();
             // Apply filtering

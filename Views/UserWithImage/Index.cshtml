@@ -9,50 +9,53 @@
 }
 else
 {
-    <table class="table table-bordered" >
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Name</th>
-                @* <th>Image</th> *@
                 <th>State</th>
-                <th>City</th>@* 
+                <th>City</th>
+                <th>Photo</th>
                 <th>Edit</th>
-                <th>Delete</th> *@
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody id="tableBody">
-         
-           @*  @foreach (var user in Model)
-            {
-                <tr id="row-@user.Id">
-                    <td>@user.Name</td>
-                    <td>
-                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(user.Image)" alt="@user.Name" style="width: 100px; height: 100px;" />
-                    </td>
-                    <td>@user.State.Name</td>
 
-                    <td>@user.City.Name</td>
+            @*  @foreach (var user in Model)
+        {
+        <tr id="row-@user.Id">
+        <td>@user.Name</td>
+        <td>
+        <img src="data:image/jpeg;base64,@Convert.ToBase64String(user.Image)" alt="@user.Name" style="width: 100px; height: 100px;" />
+        </td>
+        <td>@user.State.Name</td>
 
-                    <td>
-                        <a  class="btn btn-primary" asp-action="Create" asp-route-id="@user.Id">Edit</a>
-                    </td>
-                    <td>
-                        <a class="btn btn-danger delete-btn" data-id="@user.Id"  data-name="@user.Name">Delete</a>
+        <td>@user.City.Name</td>
 
-                    </td>
-                </tr>
-            } *@
+        <td>
+        <a  class="btn btn-primary" asp-action="Create" asp-route-id="@user.Id">Edit</a>
+        </td>
+        <td>
+        <a class="btn btn-danger delete-btn" data-id="@user.Id"  data-name="@user.Name">Delete</a>
+
+        </td>
+        </tr>
+        } *@
         </tbody>
     </table>
     <div id="noRecordFound" style="display:none; color: red;">No data found</div>
-    <input type="text" id="extra"/>
+    <input type="text" id="extra" />
 }
-@section scripts{
+@section scripts {
     <script>
         $(document).ready(function () {
             $('.table').DataTable({
                 "processing": true,
                 "serverSide": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": [3, 4, 5] } // Disable sorting for Photo, Edit, and Delete columns
+                ],
                 "layout": {
                     "topStart": 'search',
                     "topEnd": null
@@ -61,8 +64,6 @@ else
                     "url": '@Url.Action("GetUsers", "UserWithImage")', // Adjust with your controller name
                     "type": "GET",
                     "data": function (d) {
-                        // console.log($('#extra').val())
-                        // d.extra_search = $('#extra').val();
                         return {
                             filterText: d.search.value,  // Searching input from DataTable
                             pageNumber: (d.start / d.length) + 1, // Convert start index to page number
@@ -75,22 +76,41 @@ else
                 "columns": [
                     { "data": "name" },
                     { "data": "state" },
-                    { "data": "city" }
+                    { "data": "city" },
+                    {
+                        "data": "image",
+                        "render": function (x) {
+                            return "<img src='" + x + "' style='width: 100px; height: 100px;' />";
+                        }
+                    },
+                    {
+                        "data": "id",
+                        "render": function (id) {
+                            return `<a href="/UserWithImage/Create/${id}" class="btn btn-primary">Edit</a>`;
+                        }
+                    },
+                    {
+                        "data": "id",
+                        "render": function (id) {
+                            return '<button class="btn btn-danger delete-btn" data-id="' + id + '">Delete</button>';
+                        }
+                    }
                 ],
                 "order": [[0, "asc"]] // Default sorting on Name column
             });
 
+
             // Handle delete button click
             $(document).on('click', '.delete-btn', function () {
-                var record = $(this).data("id");
+                var record = $(this).attr("data-id");
+                console.log(record)
 
                 $.ajax({
                     type: "DELETE",
                     url: "/UserWithImage/Delete/" + record,
                     contentType: "application/json",
                     success: function () {
-                        console.log("Deleted successfully id " + record);
-                        $('#row-' + record).remove();
+                        $('.table').DataTable().ajax.reload(null, false);
                     },
                     error: function () {
                         alert("Failed to delete user.");
