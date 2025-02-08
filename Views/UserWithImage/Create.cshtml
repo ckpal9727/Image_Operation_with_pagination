@@ -1,0 +1,89 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model UserImageAddDto
+@{
+}
+<div class="container">
+    <form asp-action="Create"
+      method="post" 
+      enctype="multipart/form-data">
+    <div class="form-group">
+        <label class="form-label">Name</label>
+        <input class="form-control" asp-for="Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+        <div class="form-group">
+            <label class="form-label">State</label>
+            <select id="state" asp-items="Model.States" class="form-select" asp-for="StateId"></select>
+            <span asp-validation-for="StateId" class="text-danger"></span>
+        </div> 
+        <div class="form-group">
+            <label class="form-label">City</label>
+            <select  id="city" asp-items="Model.Cities" class="form-select" asp-for="CityId"></select>
+            <span asp-validation-for="StateId" class="text-danger"></span>
+        </div>
+    <div class="form-group">
+        <label class="form-label">Image</label>
+            <input class="form-control" asp-for="Image" id="imageInput" />
+            @if (Model.ImagePath != null)
+            {
+
+                <div><img src="@Model.ImagePath" style="width: 100px; height: 100px;" id="imagePreview" /></div>
+            }else{
+                <div><img src="@Model.ImagePath" style="width: 100px; height: 100px;" id="imagePreview" /></div>
+
+            }
+        <span asp-validation-for="Image" class="text-danger"></span>
+
+    </div>
+    <button class="btn btn-outline-success" type="submit" >Save</button>
+    </form>
+
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+            $('#state').change(function (e) {
+                // Get the selected value of the dropdown
+
+                $('#city').empty()
+                $.ajax({
+                    type:"GET",
+                    contentType:"application/json",
+                    url: "/UserWithImage/GetAllCity/" + $(this).val(),
+                    success: function (x) {
+                        $.each(x, function (i, item) {
+                            $('#city').append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    }
+                })
+            });
+
+
+
+            $('#imageInput').change(function (e) {
+                var file = e.target.files[0];
+                if (file) {
+                    // Create a FileReader to read the image file
+                    var reader = new FileReader();
+
+                    // On file load, set the image preview
+                    reader.onload = function (e) {
+                        $('#imagePreview').attr('src', e.target.result);  // Set the image preview
+                    };
+
+                    // Read the file as a data URL (for previewing)
+                    reader.readAsDataURL(file);
+
+                    // Log the file name or path (Note: browsers won't give you the full file path)
+                    console.log("File selected: " + file.name);
+                }
+            });
+        })
+    </script>
+}

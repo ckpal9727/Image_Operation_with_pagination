@@ -1,0 +1,263 @@
+﻿@using ImageOperation.DB
+@model List<UserWithImage>
+
+<h1>Welcome Image Preview</h1>
+
+@if (Model.Count == 0)
+{
+    <p class="text-danger">No images found</p>
+}
+else
+{
+    <table class="table table-bordered" >
+        <thead>
+            <tr>
+                <th>Name</th>
+                @* <th>Image</th> *@
+                <th>State</th>
+                <th>City</th>@* 
+                <th>Edit</th>
+                <th>Delete</th> *@
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+         
+           @*  @foreach (var user in Model)
+            {
+                <tr id="row-@user.Id">
+                    <td>@user.Name</td>
+                    <td>
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(user.Image)" alt="@user.Name" style="width: 100px; height: 100px;" />
+                    </td>
+                    <td>@user.State.Name</td>
+
+                    <td>@user.City.Name</td>
+
+                    <td>
+                        <a  class="btn btn-primary" asp-action="Create" asp-route-id="@user.Id">Edit</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger delete-btn" data-id="@user.Id"  data-name="@user.Name">Delete</a>
+
+                    </td>
+                </tr>
+            } *@
+        </tbody>
+    </table>
+    <div id="noRecordFound" style="display:none; color: red;">No data found</div>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": '@Url.Action("GetUsers", "UserWithImage")', // Adjust with your controller name
+                    "type": "GET",
+                    "data": function (d) {
+                        console.log(d)
+                        // Optionally add any additional parameters here
+                        return d;
+                    }
+                },
+                "columns": [
+                    { "data": "Name" },
+                    { "data": "State" }, // Assuming you want the state name
+                    { "data": "City" } // Assuming you want the city name
+                ]
+            });
+            if ($('#tableBody tr').length === 0) {
+                // If no rows exist, show the "No data found" message
+                $('#noRecordFound').show();
+            } else {
+                // Hide the "No data found" message if there are rows
+                $('#noRecordFound').hide();
+            }
+
+
+            $('.delete-btn').click(function (e) {
+                var record = $(this).data("id");
+                // $.ajax({
+                //     type:"DELETE",
+                //     contentType:"appication/json",
+                //     URL: "/Delete/"+record,
+                //     success:function(){
+                //         console.log("Deleted successfully id " + record);
+                //     }
+                // })
+                $.ajax({
+                    type: "DELETE",
+                    url: "/UserWithImage/Delete/" + record,
+                    contentType: "application/json",
+                    success: function (data) {
+                        console.log("Deleted successfully id " + record);
+                        $('#row-' + record).remove();
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Failed to delete employee.");
+                    }
+                });
+            });
+        })
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*trditional pagination*@
+@* @using ImageOperation.DB
+@model PaginatedList<UserWithImage>
+
+<h1>Welcome Image Preview</h1>
+
+@if (Model.Count == 0)
+{
+    <p class="text-danger">No images found</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    <a href="@Url.Action("Index", new { page = Model.PageIndex, sortBy = "Name", isAsc = !(ViewData["IsSortAsc"] as bool? ?? true) })">
+                        Name @if (ViewData["SortBy"]?.ToString() == "Name")
+                        { @if (ViewData["IsSortAsc"] as bool? ?? true)
+                            {
+                                <span>&uarr;</span>
+                            }
+                            else
+                            {
+                                <span>&darr;</span>
+                            }              }
+                    </a>
+                </th>
+                <th>Image</th>
+                <th>
+                    <a href="@Url.Action("Index", new { page = Model.PageIndex, sortBy = "State", isAsc = !(ViewData["IsSortAsc"] as bool? ?? true) })">
+                        State @if (ViewData["SortBy"]?.ToString() == "State")
+                        { @if (ViewData["IsSortAsc"] as bool? ?? true)
+                            {
+                                <span>&uarr;</span>
+                            }
+                            else
+                            {
+                                <span>&darr;</span>
+                            }              }
+                    </a>
+                </th>
+                <th>
+                    <a href="@Url.Action("Index", new { page = Model.PageIndex, sortBy = "City", isAsc = !(ViewData["IsSortAsc"] as bool? ?? true) })">
+                        City @if (ViewData["SortBy"]?.ToString() == "City")
+                        { @if (ViewData["IsSortAsc"] as bool? ?? true)
+                            {
+                                <span>&uarr;</span>
+                            }
+                            else
+                            {
+                                <span>&darr;</span>
+                            }              }
+                    </a>
+                </th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            @foreach (var user in Model)
+            {
+                <tr id="row-@user.Id">
+                    <td>@user.Name</td>
+                    <td>
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(user.Image)" alt="@user.Name" style="width: 100px; height: 100px;" />
+                    </td>
+                    <td>@user.State.Name</td>
+                    <td>@user.City.Name</td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="Create" asp-route-id="@user.Id">Edit</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger delete-btn" data-id="@user.Id" data-name="@user.Name">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div>
+        <p>SortBy: @ViewData["SortBy"]</p>
+        <p>IsSortAsc: @ViewData["IsSortAsc"]</p>
+    </div>
+
+
+    <!-- Pagination Controls -->
+    <div>
+        @if (Model.HasPreviousPage)
+        {
+            <a href="@Url.Action("Index", new { page = Model.PageIndex - 1, sortBy = ViewData["SortBy"], isAsc = ViewData["IsSortAsc"] })">Previous</a>
+        }
+        @if (Model.HasNextPage)
+        {
+            <a href="@Url.Action("Index", new { page = Model.PageIndex + 1, sortBy = ViewData["SortBy"], isAsc = ViewData["IsSortAsc"] })">Next</a>
+        }
+    </div>
+
+
+    <div id="noRecordFound" style="display:none; color: red;">No data found</div>
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            if ($('#tableBody tr').length === 0) {
+                $('#noRecordFound').show();
+            } else {
+                $('#noRecordFound').hide();
+            }
+
+            $('.delete-btn').click(function (e) {
+                var record = $(this).data("id");
+                $.ajax({
+                    type: "DELETE",
+                    url: "/UserWithImage/Delete/" + record,
+                    contentType: "application/json",
+                    success: function (data) {
+                        $('#row-' + record).remove();
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Failed to delete employee.");
+                    }
+                });
+            });
+        });
+    </script>
+}
+ *@
